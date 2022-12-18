@@ -1,7 +1,6 @@
 {
   "name": "aulabackend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -19,5 +18,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denilsonluizm/aulaBackEnd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/denilsonluizm/aulaBackEnd/issues"
+  },
+  "homepage": "https://github.com/denilsonluizm/aulaBackEnd#readme",
+  "description": ""
 }

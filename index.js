@@ -6,6 +6,8 @@ const config = require("./config");
 
 const app = express();
 
+// teste de commit
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyparser.json());
