@@ -49,7 +49,7 @@ app.get("/usuarios", (req, res) => {
 
 app.get("/usuarios/:id", (req, res) => {
   try {
-    console.log("Chamou /:id " + req.params.id);
+    // console.log("Chamou /:id " + req.params.id);
     client.query(
       "SELECT * FROM Usuarios WHERE id = $1",
       [req.params.id],
@@ -68,7 +68,7 @@ app.get("/usuarios/:id", (req, res) => {
 
 app.delete("/usuarios/:id", (req, res) => {
   try {
-    console.log("Chamou delete /:id " + req.params.id);
+    // console.log("Chamou delete /:id " + req.params.id);
     const id = req.params.id;
     client.query(
       "DELETE FROM Usuarios WHERE id = $1",
@@ -93,9 +93,9 @@ app.delete("/usuarios/:id", (req, res) => {
 
 app.post("/usuarios", (req, res) => {
   try {
-    console.log("Chamou post", req.body);
+    // console.log("Chamou post", req.body);
     const { nome, email } = req.body;
-    console.log(nome);
+    // console.log(nome);
     client.query(
       "INSERT INTO Usuarios (nome, email) VALUES ($1, $2) RETURNING * ",
       [nome, email],
@@ -106,7 +106,7 @@ app.post("/usuarios", (req, res) => {
         const { id } = result.rows[0];
         res.setHeader("id", `${id}`);
         res.status(201).json(result.rows[0]);
-        console.log(result);
+        // console.log(result);
       }
     );
   } catch (erro) {
@@ -116,7 +116,7 @@ app.post("/usuarios", (req, res) => {
 
 app.put("/usuarios/:id", (req, res) => {
   try {
-    console.log("Chamou update", req.body);
+    // console.log("Chamou update", req.body);
     const id = req.params.id;
     const { nome, email } = req.body;
     client.query(
@@ -128,7 +128,110 @@ app.put("/usuarios/:id", (req, res) => {
         } else {
           res.setHeader("id", id);
           res.status(202).json({ id: id });
-          console.log(result);
+          // console.log(result);
+        }
+      }
+    );
+  } catch (erro) {
+    console.error(erro);
+  }
+});
+
+// LOTS
+
+app.get("/membros", (req, res) => {
+  try {
+    client.query("SELECT * FROM membros", function (err, result) {
+      if (err) {
+        return console.error("Erro ao executar a qry de SELECT", err);
+      }
+      res.send(result.rows);
+      // console.log("Chamou get usuarios");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/membros/:id", (req, res) => {
+  try {
+    // console.log("Chamou /:id " + req.params.id);
+    client.query(
+      "SELECT * FROM membros WHERE id = $1",
+      [req.params.id],
+      function (err, result) {
+        if (err) {
+          return console.error("Erro ao executar a qry de SELECT id", err);
+        }
+        res.send(result.rows);
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.delete("/membros/:id", (req, res) => {
+  try {
+    // console.log("Chamou delete /:id " + req.params.id);
+    const id = req.params.id;
+    client.query(
+      "DELETE FROM membros WHERE id = $1",
+      [id],
+      function (err, result) {
+        if (err) {
+          return console.error("Erro ao executar a qry de DELETE", err);
+        } else {
+          if (result.rowCount == 0) {
+            res.status(400).json({ info: "Registro não encontrado." });
+          } else {
+            res.status(200).json({ info: `Registro excluído. Código: ${id}` });
+          }
+        }
+        // console.log(result);
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/membros", (req, res) => {
+  try {
+    // console.log("Chamou post", req.body);
+    const { nome, matricula, curso, setor, email, telefone, status, cargo } = req.body;
+    // console.log(nome);
+    client.query(
+      "INSERT INTO membros (nome, matricula, curso, setor, email, telefone, status, cargo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING * ",
+      [nome, matricula, curso, setor, email, telefone, status, cargo],
+      function (err, result) {
+        if (err) {
+          return console.error("Erro ao executar a qry de INSERT", err);
+        }
+        const { id } = result.rows[0];
+        res.setHeader("id", `${id}`);
+        res.status(201).json(result.rows[0]);
+      }
+    );
+  } catch (erro) {
+    console.error(erro);
+  }
+});
+
+app.put("/membros/:id", (req, res) => {
+  try {
+    // console.log("Chamou update", req.body);
+    const id = req.params.id;
+    const { nome, matricula, curso, setor, email, telefone, status, cargo } = req.body;
+    client.query(
+      "UPDATE membros SET nome=$1, matricula=$2, curso=$3, setor=$4, email=$5, telefone=$6, status=$7, cargo=$8 WHERE id =$9 ",
+      [ nome, matricula, curso, setor, email, telefone, status, cargo, id],
+      function (err, result) {
+        if (err) {
+          return console.error("Erro ao executar a qry de UPDATE", err);
+        } else {
+          res.setHeader("id", id);
+          res.status(202).json({ id: id });
         }
       }
     );
