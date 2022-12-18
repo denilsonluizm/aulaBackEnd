@@ -30,6 +30,7 @@ client.connect(function (err) {
 
 app.get("/", (req, res) => {
   console.log("Response ok.");
+  res.header("Access-Control-Allow-Origin", "*");
   res.send("Ok!!!");
 });
 
@@ -145,6 +146,7 @@ app.get("/membros", (req, res) => {
       if (err) {
         return console.error("Erro ao executar a qry de SELECT", err);
       }
+      res.header("Access-Control-Allow-Origin", "*");
       res.send(result.rows);
       // console.log("Chamou get usuarios");
     });
@@ -163,6 +165,7 @@ app.get("/membros/:id", (req, res) => {
         if (err) {
           return console.error("Erro ao executar a qry de SELECT id", err);
         }
+        res.header("Access-Control-Allow-Origin", "*");
         res.send(result.rows);
       }
     );
@@ -172,6 +175,7 @@ app.get("/membros/:id", (req, res) => {
 });
 
 app.delete("/membros/:id", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     // console.log("Chamou delete /:id " + req.params.id);
     const id = req.params.id;
@@ -209,6 +213,7 @@ app.post("/membros", (req, res) => {
           return console.error("Erro ao executar a qry de INSERT", err);
         }
         const { id } = result.rows[0];
+        res.header("Access-Control-Allow-Origin", "*");
         res.setHeader("id", `${id}`);
         res.status(201).json(result.rows[0]);
       }
@@ -230,6 +235,7 @@ app.put("/membros/:id", (req, res) => {
         if (err) {
           return console.error("Erro ao executar a qry de UPDATE", err);
         } else {
+          res.header("Access-Control-Allow-Origin", "*");
           res.setHeader("id", id);
           res.status(202).json({ id: id });
         }
